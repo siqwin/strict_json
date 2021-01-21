@@ -1,0 +1,7 @@
+name: strict_json
+description: Strict working with json
+version: 1.0.0
+repository: https://github.com/siqwin/strict_json.git
+
+environment:
+  sdk: ">=2.6.0 <3.0.0"
