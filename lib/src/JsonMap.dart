@@ -11,66 +11,61 @@ class JsonMap {
   /// Returns int value by [key]
   ///
   /// If map not contains key or the value has a different type then throw FormatException
-  int intValue(String key) {
-    return numValue(key).toInt();
+  int getInt(String key) {
+    return getNum(key).toInt();
   }
 
   /// Returns int value by [key] or default value
-  int intValueOr(String key, [int defaultValue]) {
-    return numValueOr(key, defaultValue)?.toInt();
+  int getIntOr(String key, [int defaultValue]) {
+    return getNumOr(key, defaultValue)?.toInt();
   }
 
   /// Returns string value by [key]
   ///
   /// If map not contains or the value has a different type then throw FormatException
-  String stringValue(String key) {
+  String getString(String key) {
     return _value(key, required: true);
   }
 
   /// Returns string value by [key] or default value
-  String stringValueOr(String key, [String defaultValue]) {
+  String getStringOr(String key, [String defaultValue]) {
     return _value(key, required: false, defaultValue: defaultValue);
   }
 
   /// Returns bool value by [key]
   ///
   /// If map not contains key or the value has a different type then throw FormatException
-  bool boolValue(String key) {
+  bool getBool(String key) {
     return _value(key, required: true);
   }
 
   /// Returns bool value by [key] or default value
-  bool boolValueOr(String key, [bool defaultValue]) {
+  bool getBoolOr(String key, [bool defaultValue]) {
     return _value(key, required: false, defaultValue: defaultValue);
   }
 
   /// Returns double value by [key]
   ///
   /// If map not contains key or the value has a different type then throw FormatException
-  double doubleValue(String key) {
-    return numValue(key)?.toDouble();
+  double getDouble(String key) {
+    return getNum(key)?.toDouble();
   }
 
   /// Returns double value by [key] or default value
-  double doubleValueOr(String key, [double defaultValue]) {
-    return numValueOr(key, defaultValue)?.toDouble();
+  double getDoubleOr(String key, [double defaultValue]) {
+    return getNumOr(key, defaultValue)?.toDouble();
   }
 
   /// Returns num value by [key]
   ///
   /// If map not contains key or the value has a different type then throw FormatException
-  num numValue(String key) {
+  num getNum(String key) {
     return _value(key, required: true);
   }
 
   /// Returns num value by [key] or default value
-  num numValueOr(String key, [num defaultValue]) {
+  num getNumOr(String key, [num defaultValue]) {
     return _value(key, required: false, defaultValue: defaultValue);
-  }
-
-  /// Returns true if map contains the given [key].
-  bool containsKey(String key) {
-    return _jsonMap.containsKey(key);
   }
 
   /// Returns JsonMap by [key]
@@ -101,7 +96,7 @@ class JsonMap {
 
   /// Returns Json by [key]
   ///
-  /// If map not contains ket or the value is not Map or List then throw FormatException
+  /// If map not contains key or the value is not Map or List then throw FormatException
   Json getJson(String key) {
     return Json(_getFromMap(key, true));
   }
@@ -109,6 +104,16 @@ class JsonMap {
   /// Returns Json by [key] or default value
   Json getJsonOr(String key, [ Object defaultValue ]) {
     return Json(_getFromMap(key, false) ?? defaultValue);
+  }
+
+  /// Returns true if map contains the given [key].
+  /// If a generic parameter is specified, then the value is also checked against the type of the parameter.
+  bool contains<T>(String key) {
+    final result = _jsonMap.containsKey(key);
+    if (result == true && T != dynamic) {
+      return _jsonMap[key].runtimeType == T.runtimeType;
+    }
+    return result;
   }
 
   /// Convert JsonMap with converter.
@@ -144,7 +149,10 @@ class JsonMap {
       final dynamic data = _jsonMap[key];
       if (data is T) {
         return data;
-      } else if (data == null && !required) {
+      } else if (!required) {
+        if (data != null) {
+          print("Warning: The field '$key' has wrong type ('${T.toString()}' expected but '${data.runtimeType}' given)");
+        }
         return null;
       } else {
         throw FormatException("The field '$key' has wrong type ('${T.toString()}' expected but '${data.runtimeType}' given)", data?.toString());
