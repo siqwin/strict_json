@@ -5,79 +5,79 @@ class JsonMap {
   final Map<String, dynamic> _jsonMap;
 
   /// Create JsonMap from Map<String, dynamic>
-  JsonMap(Map<String, dynamic> map):
+  const JsonMap(Map<String, dynamic>? map):
     _jsonMap = map ?? const <String, dynamic>{};
 
   /// Returns int value by [key]
   ///
   /// If map not contains key or the value has a different type then throw FormatException
   int getInt(String key) {
-    return getNum(key).toInt();
+    return _value(key);
   }
 
   /// Returns int value by [key] or default value
-  int getIntOr(String key, [int defaultValue]) {
-    return getNumOr(key, defaultValue)?.toInt();
+  int? getIntOr(String key, [int? defaultValue]) {
+    return _valueOr(key, defaultValue);
   }
 
   /// Returns string value by [key]
   ///
   /// If map not contains or the value has a different type then throw FormatException
   String getString(String key) {
-    return _value(key, required: true);
+    return _value(key);
   }
 
   /// Returns string value by [key] or default value
-  String getStringOr(String key, [String defaultValue]) {
-    return _value(key, required: false, defaultValue: defaultValue);
+  String? getStringOr(String key, [String? defaultValue]) {
+    return _valueOr(key, defaultValue);
   }
 
   /// Returns bool value by [key]
   ///
   /// If map not contains key or the value has a different type then throw FormatException
   bool getBool(String key) {
-    return _value(key, required: true);
+    return _value(key);
   }
 
   /// Returns bool value by [key] or default value
-  bool getBoolOr(String key, [bool defaultValue]) {
-    return _value(key, required: false, defaultValue: defaultValue);
+  bool? getBoolOr(String key, [bool? defaultValue]) {
+    return _valueOr(key, defaultValue);
   }
 
   /// Returns double value by [key]
   ///
   /// If map not contains key or the value has a different type then throw FormatException
   double getDouble(String key) {
-    return getNum(key)?.toDouble();
+    return _value(key);
   }
 
   /// Returns double value by [key] or default value
-  double getDoubleOr(String key, [double defaultValue]) {
-    return getNumOr(key, defaultValue)?.toDouble();
+  double? getDoubleOr(String key, [double? defaultValue]) {
+    return _valueOr(key, defaultValue)?.toDouble();
   }
 
   /// Returns num value by [key]
   ///
   /// If map not contains key or the value has a different type then throw FormatException
   num getNum(String key) {
-    return _value(key, required: true);
+    return _value(key);
   }
 
   /// Returns num value by [key] or default value
-  num getNumOr(String key, [num defaultValue]) {
-    return _value(key, required: false, defaultValue: defaultValue);
+  num? getNumOr(String key, [num? defaultValue]) {
+    return _valueOr(key, defaultValue);
   }
 
   /// Returns JsonMap by [key]
   ///
   /// If map not contains key or the value is not a Map, then throw FormatException
   JsonMap getMap(String key) {
-    return JsonMap(_getFromMap(key, true));
+    return JsonMap(_value(key));
   }
 
   /// Returns JsonMap by [key] or default value
-  JsonMap getMapOr(String key, [ Map<String, dynamic> defaultValue ]) {
-    final Map<String, dynamic> value  = _getFromMap(key, false) ?? defaultValue;
+  JsonMap? getMapOr(String key, [ Map<String, dynamic>? defaultValue ]) {
+    final Map<String, dynamic>? value  = _valueOr(key, defaultValue);
     return value != null ? JsonMap(value) : null;
   }
 
@@ -85,12 +85,12 @@ class JsonMap {
   ///
   /// If map not contains key or the value is not a List then throw FormatException
   JsonList getList(String key) {
-    return JsonList(_getFromMap(key, true));
+    return JsonList(_value(key));
   }
 
   /// Returns JsonList by [key] or default value
-  JsonList getListOr(String key, [ List<dynamic> defaultValue ]) {
-    final List<dynamic> value  = _getFromMap(key, false) ?? defaultValue;
+  JsonList? getListOr(String key, [ List<dynamic>? defaultValue ]) {
+    final List<dynamic>? value  = _valueOr(key, defaultValue);
     return value != null ? JsonList(value) : null;
   }
 
@@ -98,22 +98,20 @@ class JsonMap {
   ///
   /// If map not contains key or the value is not Map or List then throw FormatException
   Json getJson(String key) {
-    return Json(_getFromMap(key, true));
+    return Json(_value(key));
   }
 
   /// Returns Json by [key] or default value
-  Json getJsonOr(String key, [ Object defaultValue ]) {
-    return Json(_getFromMap(key, false) ?? defaultValue);
+  Json? getJsonOr(String key, [ Object? defaultValue ]) {
+    final value = _valueOr(key, defaultValue);
+    return value != null ? Json(value) : null;
   }
 
   /// Returns true if map contains the given [key].
   /// If a generic parameter is specified, then the value is also checked against the type of the parameter.
   bool contains<T>(String key) {
     final result = _jsonMap.containsKey(key);
-    if (result == true && T != dynamic) {
-      return _jsonMap[key].runtimeType == T.runtimeType;
-    }
-    return result;
+    return result && _jsonMap[key] is T;
   }
 
   /// Convert JsonMap with converter.
@@ -140,28 +138,29 @@ class JsonMap {
   /// Returns string representation of the map
   String toJsonString() => jsonEncode(_jsonMap);
 
-  T _value<T>(String key, { bool required = true, T defaultValue }) {
-    return _getFromMap(key, required) ?? defaultValue;
-  }
-
-  T _getFromMap<T>(String key, bool required) {
+  T _value<T>(String key) {
     if (_jsonMap.containsKey(key)) {
-      final dynamic data = _jsonMap[key];
+      final Object? data = _jsonMap[key];
       if (data is T) {
         return data;
-      } else if (!required) {
-        if (data != null) {
-          print("Warning: The field '$key' has wrong type ('${T.toString()}' expected but '${data.runtimeType}' given)");
-        }
-        return null;
       } else {
         throw FormatException("The field '$key' has wrong type ('${T.toString()}' expected but '${data.runtimeType}' given)", data?.toString());
       }
-    } else if (required) {
-      throw FormatException("The field '$key' is null but required (expected '${T.toString()}')");
     } else {
-      return null;
+      throw FormatException("The field '$key' is null but required (expected '${T.toString()}')");
     }
+  }
+
+  T _valueOr<T>(String key, T defaultValue) {
+    if (_jsonMap.containsKey(key)) {
+      final Object? data = _jsonMap[key];
+      if (data is T) {
+        return data;
+      } else if (data != null) {
+        print("Warning: The field '$key' has wrong type ('${T.toString()}' expected but '${data.runtimeType}' given)");
+      }
+    }
+    return defaultValue;
   }
 
 }

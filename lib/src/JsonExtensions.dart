@@ -12,7 +12,7 @@ extension JsonMapExtensions on Map<String, dynamic> {
 
 }
 
-extension JsonExtensions on String {
+extension JsonStringExtensions on String {
 
   JsonList toJsonList() => Json(this).asList();
 

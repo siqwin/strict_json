@@ -2,10 +2,10 @@ part of strict_json;
 
 class Json {
 
-  final Object _jsonObject;
+  final Object? _jsonObject;
 
   /// Create Json from the Object
-  Json(Object jsonObject): _jsonObject = jsonObject;
+  const Json(Object? jsonObject): _jsonObject = jsonObject;
 
   /// Convert Json to the JsonMap
   ///
@@ -17,7 +17,7 @@ class Json {
     } else if (json is String) {
       return Json(jsonDecode(json)).asMap();
     } else if (json == null) {
-      return JsonMap(null);
+      return const JsonMap(null);
     } else if (json is JsonMap) {
       return json;
     } else {
@@ -35,7 +35,7 @@ class Json {
     } else if (json is String) {
       return Json(jsonDecode(json)).asList();
     } else if (json == null) {
-      return JsonList(null);
+      return const JsonList(null);
     } else if (json is JsonList) {
       return json;
     } else {
@@ -104,7 +104,7 @@ class Json {
   }
 
   /// Return Json source object
-  Object asObject() {
+  Object? asObject() {
     return _jsonObject;
   }
 

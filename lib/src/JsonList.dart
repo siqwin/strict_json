@@ -5,7 +5,7 @@ class JsonList {
   final List<dynamic> _jsonList;
 
   /// Create JsonList from List<dynamic>
-  JsonList(List<dynamic> list):
+  const JsonList(List<dynamic>? list):
     _jsonList = list ?? const <dynamic>[];
 
   /// Returns first element from the list
@@ -20,8 +20,8 @@ class JsonList {
   }
 
   /// Returns first element from the list or default value
-  Json firstOr([Object defaultValue]) {
-    return Json(_jsonList.isNotEmpty ? _jsonList.first : defaultValue);
+  Json? firstOr([Object? defaultValue]) {
+    return _jsonList.isNotEmpty ? Json(_jsonList.first) : (defaultValue != null ? Json(defaultValue) : null);
   }
 
   /// Returns last element from the list
@@ -36,15 +36,15 @@ class JsonList {
   }
 
   /// Returns first element from the list or default value
-  Json lastOr([Object defaultValue]) {
-    return Json(_jsonList.isNotEmpty ? _jsonList.last : defaultValue);
+  Json? lastOr([Object? defaultValue]) {
+    return _jsonList.isNotEmpty ? Json(_jsonList.last) : (defaultValue != null ? Json(defaultValue) : null);
   }
 
   /// Returns [index]] element from the list
   ///
   /// If the index out of range throw FormatException.
   Json elementAt(int index) {
-    if (_jsonList.length >= index) {
+    if (_jsonList.length > index) {
       return Json(_jsonList[index]);
     } else {
       throw const FormatException("Index is out of range");
@@ -52,12 +52,8 @@ class JsonList {
   }
 
   /// Returns [index]] element from the list or default value
-  Json elementAtOr(int index, [Json defaultValue]) {
-    if (_jsonList.length >= index) {
-      return Json(_jsonList[index]);
-    } else {
-      return defaultValue;
-    }
+  Json? elementAtOr(int index, [Object? defaultValue]) {
+    return _jsonList.length > index ? Json(_jsonList[index]) : (defaultValue != null ? Json(defaultValue) : null);
   }
 
   /// Represents each element of the list as JsonMap and convert it with converter.
