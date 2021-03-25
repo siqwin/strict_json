@@ -14,8 +14,10 @@ void main() {
     expect(json.getNum(jsonMapIntKey), jsonMapIntValue);
     expect(json.getNumOr(jsonMapIntKey), jsonMapIntValue);
     expect(json.getIntOr(jsonMapIntKey), jsonMapIntValue);
-    expect(json.getIntOr(jsonMapEmptyKey, jsonMapIntValue), jsonMapIntValue);
-    expect(json.getIntOr(jsonMapEmptyKey), null);
+    expect(json.getIntOr(jsonMapMissKey, jsonMapIntValue), jsonMapIntValue);
+    expect(json.getIntOr(jsonMapMissKey), null);
+    expect(json.getIntOr(jsonMapNullKey, jsonMapIntValue), jsonMapIntValue);
+    expect(json.getIntOr(jsonMapNullKey), null);
 
     expect(() => json.getString(jsonMapIntKey), throwsFormatException);
     expect(json.getStringOr(jsonMapIntKey), null);
@@ -36,8 +38,10 @@ void main() {
     expect(json.getNum(jsonMapDoubleKey), jsonMapDoubleValue);
     expect(json.getNumOr(jsonMapDoubleKey), jsonMapDoubleValue);
     expect(json.getDoubleOr(jsonMapDoubleKey), jsonMapDoubleValue);
-    expect(json.getDoubleOr(jsonMapEmptyKey, jsonMapDoubleValue), jsonMapDoubleValue);
-    expect(json.getDoubleOr(jsonMapEmptyKey), null);
+    expect(json.getDoubleOr(jsonMapMissKey, jsonMapDoubleValue), jsonMapDoubleValue);
+    expect(json.getDoubleOr(jsonMapMissKey), null);
+    expect(json.getDoubleOr(jsonMapNullKey, jsonMapDoubleValue), jsonMapDoubleValue);
+    expect(json.getDoubleOr(jsonMapNullKey), null);
 
     expect(() => json.getInt(jsonMapDoubleKey), throwsFormatException);
     expect(json.getIntOr(jsonMapDoubleKey), null);
@@ -56,8 +60,10 @@ void main() {
 
     expect(json.getString(jsonMapStringKey), jsonMapStringValue);
     expect(json.getStringOr(jsonMapStringKey), jsonMapStringValue);
-    expect(json.getStringOr(jsonMapEmptyKey, jsonMapStringValue), jsonMapStringValue);
-    expect(json.getStringOr(jsonMapEmptyKey), null);
+    expect(json.getStringOr(jsonMapMissKey, jsonMapStringValue), jsonMapStringValue);
+    expect(json.getStringOr(jsonMapMissKey), null);
+    expect(json.getStringOr(jsonMapNullKey, jsonMapStringValue), jsonMapStringValue);
+    expect(json.getStringOr(jsonMapNullKey), null);
 
     expect(() => json.getInt(jsonMapStringKey), throwsFormatException);
     expect(json.getIntOr(jsonMapStringKey), null);
@@ -78,8 +84,10 @@ void main() {
 
     expect(json.getBool(jsonMapBoolKey), jsonMapBoolValue);
     expect(json.getBoolOr(jsonMapBoolKey), jsonMapBoolValue);
-    expect(json.getBoolOr(jsonMapEmptyKey, jsonMapBoolValue), jsonMapBoolValue);
-    expect(json.getBoolOr(jsonMapEmptyKey), null);
+    expect(json.getBoolOr(jsonMapMissKey, jsonMapBoolValue), jsonMapBoolValue);
+    expect(json.getBoolOr(jsonMapMissKey), null);
+    expect(json.getBoolOr(jsonMapNullKey, jsonMapBoolValue), jsonMapBoolValue);
+    expect(json.getBoolOr(jsonMapNullKey), null);
 
     expect(() => json.getInt(jsonMapBoolKey), throwsFormatException);
     expect(json.getIntOr(jsonMapBoolKey), null);
@@ -104,10 +112,14 @@ void main() {
     expect(json.getMapOr(jsonMapMapKey), isA<JsonMap>());
     expect(json.getMapOr(jsonMapMapKey)?.toMap(), jsonMapMapValue);
 
-    expect(json.getMapOr(jsonMapEmptyKey, jsonMapMapValue), isA<JsonMap>());
-    expect(json.getMapOr(jsonMapEmptyKey, jsonMapMapValue)?.toMap(), jsonMapMapValue);
+    expect(json.getMapOr(jsonMapMissKey, jsonMapMapValue), isA<JsonMap>());
+    expect(json.getMapOr(jsonMapMissKey, jsonMapMapValue)?.toMap(), jsonMapMapValue);
 
-    expect(json.getMapOr(jsonMapEmptyKey), null);
+    expect(json.getMapOr(jsonMapNullKey, jsonMapMapValue), isA<JsonMap>());
+    expect(json.getMapOr(jsonMapNullKey, jsonMapMapValue)?.toMap(), jsonMapMapValue);
+
+    expect(json.getMapOr(jsonMapMissKey), null);
+    expect(json.getMapOr(jsonMapNullKey), null);
 
     expect(() => json.getInt(jsonMapMapKey), throwsFormatException);
     expect(json.getIntOr(jsonMapMapKey), null);
@@ -132,10 +144,14 @@ void main() {
     expect(json.getListOr(jsonMapListKey), isA<JsonList>());
     expect(json.getListOr(jsonMapListKey)?.toList(), jsonMapListValue);
 
-    expect(json.getListOr(jsonMapEmptyKey, jsonMapListValue), isA<JsonList>());
-    expect(json.getListOr(jsonMapEmptyKey, jsonMapListValue)?.toList(), jsonMapListValue);
+    expect(json.getListOr(jsonMapMissKey, jsonMapListValue), isA<JsonList>());
+    expect(json.getListOr(jsonMapMissKey, jsonMapListValue)?.toList(), jsonMapListValue);
 
-    expect(json.getListOr(jsonMapEmptyKey), null);
+    expect(json.getListOr(jsonMapNullKey, jsonMapListValue), isA<JsonList>());
+    expect(json.getListOr(jsonMapNullKey, jsonMapListValue)?.toList(), jsonMapListValue);
+
+    expect(json.getListOr(jsonMapMissKey), null);
+    expect(json.getListOr(jsonMapNullKey), null);
 
     expect(() => json.getInt(jsonMapListKey), throwsFormatException);
     expect(json.getIntOr(jsonMapListKey), null);
@@ -158,9 +174,13 @@ void main() {
     expect(json.contains<double>(jsonMapDoubleKey), true);
     expect(json.contains<double>(jsonMapIntKey), false);
 
-    expect(json.contains<Map>(jsonMapEmptyKey), false);
-    expect(json.contains<String>(jsonMapEmptyKey), false);
-    expect(json.contains<dynamic>(jsonMapEmptyKey), false);
+    expect(json.contains<Map>(jsonMapMissKey), false);
+    expect(json.contains<String>(jsonMapMissKey), false);
+    expect(json.contains<dynamic>(jsonMapMissKey), false);
+
+    expect(json.contains<Map>(jsonMapNullKey), false);
+    expect(json.contains<String>(jsonMapNullKey), false);
+    expect(json.contains<dynamic>(jsonMapNullKey), true);
   });
 
 }

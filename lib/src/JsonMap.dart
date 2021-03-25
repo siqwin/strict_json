@@ -155,8 +155,8 @@ class JsonMap {
     if (_jsonMap.containsKey(key)) {
       final Object? data = _jsonMap[key];
       if (data is T) {
-        return data;
-      } else if (data != null) {
+        return data == null ? defaultValue : data;
+      } else {
         print("Warning: The field '$key' has wrong type ('${T.toString()}' expected but '${data.runtimeType}' given)");
       }
     }

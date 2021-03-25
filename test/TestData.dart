@@ -14,7 +14,8 @@ const jsonMapMapValue = { "key": "value" };
 const jsonMapListKey = "list_key";
 const jsonMapListValueString = """[ "a", "b", "c" ]""";
 const jsonMapListValue = [ "a", "b", "c" ];
-const jsonMapEmptyKey = "empty";
+const jsonMapMissKey = "empty";
+const jsonMapNullKey = "null";
 
 const stringJsonMap = """{
   "$jsonMapStringKey": "$jsonMapStringValue",
@@ -22,7 +23,8 @@ const stringJsonMap = """{
   "$jsonMapDoubleKey": "$jsonMapDoubleValue",
   "$jsonMapBoolKey": "$jsonMapBoolValue",
   "$jsonMapMapKey": $jsonMapMapValueString,
-  "$jsonMapListKey": $jsonMapListValueString
+  "$jsonMapListKey": $jsonMapListValueString,
+  "$jsonMapNullKey": null
 }""";
 
 const Map<String, dynamic> jsonMap = {
@@ -31,7 +33,8 @@ const Map<String, dynamic> jsonMap = {
   jsonMapDoubleKey: jsonMapDoubleValue,
   jsonMapBoolKey: jsonMapBoolValue,
   jsonMapMapKey: jsonMapMapValue,
-  jsonMapListKey: jsonMapListValue
+  jsonMapListKey: jsonMapListValue,
+  jsonMapNullKey: null
 };
 
 const jsonOfStringJsonMap = Json(stringJsonMap);
