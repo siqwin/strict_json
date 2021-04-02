@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:strict_json/strict_json.dart';
 import 'package:test/test.dart';
 
@@ -41,6 +43,21 @@ void main() {
 
     expect(jsonEmpty.elementAtOr(0), null);
     expect(jsonEmpty.elementAtOr(1, jsonList.first)?.asObject(), jsonList.first);
+  });
+
+  test('JsonList.toJsonString', () {
+    expect(json.toJsonString(), jsonEncode(json.toList()));
+  });
+
+  test('JsonList.cast', () {
+    final List<double> doubleList = [1.0, 2.0, 3.0];
+    final List<num> numList = doubleList;
+    expect(JsonList(numList).cast<double>(), doubleList);
+    expect(JsonList(numList).cast<double>().toList(), isA<List<double>>());
+  });
+
+  test('JsonList.convert', () {
+    expect(json.convert((value) => value).toList(), jsonList);
   });
 
 }

@@ -19,9 +19,9 @@ const jsonMapNullKey = "null";
 
 const stringJsonMap = """{
   "$jsonMapStringKey": "$jsonMapStringValue",
-  "$jsonMapIntKey": "$jsonMapIntValue",
-  "$jsonMapDoubleKey": "$jsonMapDoubleValue",
-  "$jsonMapBoolKey": "$jsonMapBoolValue",
+  "$jsonMapIntKey": $jsonMapIntValue,
+  "$jsonMapDoubleKey": $jsonMapDoubleValue,
+  "$jsonMapBoolKey": $jsonMapBoolValue,
   "$jsonMapMapKey": $jsonMapMapValueString,
   "$jsonMapListKey": $jsonMapListValueString,
   "$jsonMapNullKey": null

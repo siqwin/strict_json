@@ -1,12 +1,14 @@
-part of strict_json;
+import 'dart:convert';
+
+import 'Json.dart';
+import 'JsonMap.dart';
 
 class JsonList {
 
   final List<dynamic> _jsonList;
 
   /// Create JsonList from List<dynamic>
-  const JsonList(List<dynamic>? list):
-    _jsonList = list ?? const <dynamic>[];
+  const JsonList(List<dynamic>? list) : _jsonList = list ?? const <dynamic>[];
 
   /// Returns first element from the list
   ///

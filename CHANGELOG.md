@@ -1,3 +1,8 @@
+2.0.2
+Fix some bugs
+Add some api
+Add some tests
+
 2.0.1
 Fix bug
 
