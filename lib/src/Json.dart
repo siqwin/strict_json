@@ -35,7 +35,7 @@ class Json {
       }
     }
     if (json != null) {
-      print(_jsonHasUnsupportedType(json.runtimeType.toString()));
+      onError(_jsonHasUnsupportedType(json.runtimeType.toString()));
     }
     return defaultValue != null ? JsonMap(defaultValue) : null;
   }
@@ -65,7 +65,7 @@ class Json {
       }
     }
     if (json != null) {
-      print(_jsonHasUnsupportedType(json.runtimeType.toString()));
+      onError(_jsonHasUnsupportedType(json.runtimeType.toString()));
     }
     return defaultValue != null ? JsonList(defaultValue) : null;
   }
@@ -131,7 +131,7 @@ class Json {
       return value;
     } else {
       if (value != null) {
-        print(_jsonHasWrongType<T>(value.runtimeType.toString()));
+        onError(_jsonHasWrongType<T>(value.runtimeType.toString()));
       }
       return defaultValue;
     }
@@ -142,7 +142,7 @@ class Json {
     if (value is T) {
       return value;
     } else if (defaultValue != null) {
-      print(_jsonHasWrongType<T>(value.runtimeType.toString()));
+      onError(_jsonHasWrongType<T>(value.runtimeType.toString()));
       return defaultValue;
     } else {
       throw FormatException(_jsonHasWrongType<T>(value.runtimeType.toString()));
@@ -154,14 +154,18 @@ class Json {
       final decode = jsonDecode(json);
       return Json(decode);
     } catch (error) {
-      print(_jsonStringFailedDecode(error));
+      onError(_jsonStringFailedDecode(error));
     }
     return null;
   }
 
+  static Function(String message) onError = _defaultErrorHandler;
+
+  static void _defaultErrorHandler(String message) => print(message);
+
   String _jsonHasWrongType<T>(String dataType) => "strict_json: the json object has wrong type ('${T.toString()}' expected but '$dataType' given)";
 
-  Object? _jsonStringFailedDecode(Object error) => "strict_json: the json object failed to decode ($error)";
+  String _jsonStringFailedDecode(Object error) => "strict_json: the json object failed to decode ($error)";
 
-  Object? _jsonHasUnsupportedType(String dataType) => "strict_json: the json object has unsupported type ('Map', 'String', 'JsonMap' expected but '$dataType' given)";
+  String _jsonHasUnsupportedType(String dataType) => "strict_json: the json object has unsupported type ('Map', 'String', 'JsonMap' expected but '$dataType' given)";
 }

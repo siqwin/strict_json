@@ -146,13 +146,13 @@ class JsonMap {
       if (value is T) {
         return value;
       } else if (defaultValue != null) {
-        print(_fieldHasWrongType<T>(key, value.runtimeType.toString()));
+        Json.onError(_fieldHasWrongType<T>(key, value.runtimeType.toString()));
         return defaultValue;
       } else {
         throw FormatException(_fieldHasWrongType<T>(key, value.runtimeType.toString()), value?.toString());
       }
     } else if (defaultValue != null) {
-      print(_fieldIsNullButRequired<T>(key));
+      Json.onError(_fieldIsNullButRequired<T>(key));
       return defaultValue;
     } else {
       throw FormatException(_fieldIsNullButRequired<T>(key));
@@ -165,7 +165,7 @@ class JsonMap {
       if (value is T) {
         return value == null ? defaultValue : value;
       } else {
-        print(_fieldHasWrongType<T>(key, value.runtimeType.toString()));
+        Json.onError(_fieldHasWrongType<T>(key, value.runtimeType.toString()));
       }
     }
     return defaultValue;
