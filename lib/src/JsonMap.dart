@@ -152,7 +152,6 @@ class JsonMap {
         throw FormatException(_fieldHasWrongType<T>(key, value.runtimeType.toString()), value?.toString());
       }
     } else if (defaultValue != null) {
-      Json.onError(_fieldIsNullButRequired<T>(key));
       return defaultValue;
     } else {
       throw FormatException(_fieldIsNullButRequired<T>(key));
