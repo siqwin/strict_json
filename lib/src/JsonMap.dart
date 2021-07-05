@@ -141,35 +141,33 @@ class JsonMap {
   String toJsonString() => jsonEncode(_jsonMap);
 
   T _value<T>(String key, T? defaultValue) {
-    if (_jsonMap.containsKey(key)) {
-      final Object? value = _jsonMap[key];
-      if (value is T) {
-        return value;
-      } else if (defaultValue != null) {
-        if (value != null) {
-          Json.onError(_fieldHasWrongType<T>(key, value.runtimeType.toString()));
-        }
+    final value = _jsonMap[key];
+    if (value == null) {
+      if (defaultValue != null) {
         return defaultValue;
-      } else {
-        throw FormatException(_fieldHasWrongType<T>(key, value.runtimeType.toString()), value?.toString());
       }
-    } else if (defaultValue != null) {
-      return defaultValue;
-    } else {
       throw FormatException(_fieldIsNullButRequired<T>(key));
+    } else if (value is T) {
+      return value;
+    } else {
+      if (defaultValue != null) {
+        Json.onError(_fieldHasWrongType<T>(key, value.runtimeType.toString()));
+        return defaultValue;
+      }
+      throw FormatException(_fieldHasWrongType<T>(key, value.runtimeType.toString()), value?.toString());
     }
   }
 
   T _valueOr<T>(String key, T defaultValue) {
-    if (_jsonMap.containsKey(key)) {
-      final Object? value = _jsonMap[key];
-      if (value is T) {
-        return value;
-      } else if (value != null) {
-        Json.onError(_fieldHasWrongType<T>(key, value.runtimeType.toString()));
-      }
+    final value = _jsonMap[key];
+    if (value == null) {
+      return defaultValue;
+    } else if (value is T) {
+      return value;
+    } else {
+      Json.onError(_fieldHasWrongType<T>(key, value.runtimeType.toString()));
+      return defaultValue;
     }
-    return defaultValue;
   }
 
   String _fieldIsNullButRequired<T>(String key) => "strict_json: the field '$key' is null but required ('${T.toString()}' expected)";

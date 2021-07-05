@@ -1,3 +1,6 @@
+2.0.4
+Fix some bugs
+
 2.0.3
 Fix some bugs
 

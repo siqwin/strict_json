@@ -125,27 +125,33 @@ class Json {
     return _jsonObject;
   }
 
-  T? _getValueOr<T>(T? defaultValue) {
-    final value = _jsonObject;
-    if (value is T) {
+  T _getValue<T>(T? defaultValue) {
+    final dynamic value = _jsonObject;
+    if (value == null) {
+      if (defaultValue != null) {
+        return defaultValue;
+      }
+      throw FormatException(_jsonIsNullButRequired<T>());
+    } else if (value is T) {
       return value;
     } else {
-      if (value != null) {
+      if (defaultValue != null) {
         onError(_jsonHasWrongType<T>(value.runtimeType.toString()));
+        return defaultValue;
       }
-      return defaultValue;
+      throw FormatException(_jsonHasWrongType<T>(value.runtimeType.toString()));
     }
   }
 
-  T _getValue<T>(T? defaultValue) {
-    final value = _jsonObject;
-    if (value is T) {
+  T? _getValueOr<T>(T? defaultValue) {
+    final dynamic value = _jsonObject;
+    if (value == null) {
+      return defaultValue;
+    } else if (value is T) {
       return value;
-    } else if (defaultValue != null) {
+    } else {
       onError(_jsonHasWrongType<T>(value.runtimeType.toString()));
       return defaultValue;
-    } else {
-      throw FormatException(_jsonHasWrongType<T>(value.runtimeType.toString()));
     }
   }
 
@@ -162,6 +168,8 @@ class Json {
   static Function(String message) onError = _defaultErrorHandler;
 
   static void _defaultErrorHandler(String message) => print(message);
+
+  String _jsonIsNullButRequired<T>() => "strict_json: the json is null but required ('${T.toString()}' expected)";
 
   String _jsonHasWrongType<T>(String dataType) => "strict_json: the json object has wrong type ('${T.toString()}' expected but '$dataType' given)";
 
