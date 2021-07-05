@@ -146,7 +146,9 @@ class JsonMap {
       if (value is T) {
         return value;
       } else if (defaultValue != null) {
-        Json.onError(_fieldHasWrongType<T>(key, value.runtimeType.toString()));
+        if (value != null) {
+          Json.onError(_fieldHasWrongType<T>(key, value.runtimeType.toString()));
+        }
         return defaultValue;
       } else {
         throw FormatException(_fieldHasWrongType<T>(key, value.runtimeType.toString()), value?.toString());
@@ -162,8 +164,8 @@ class JsonMap {
     if (_jsonMap.containsKey(key)) {
       final Object? value = _jsonMap[key];
       if (value is T) {
-        return value == null ? defaultValue : value;
-      } else {
+        return value;
+      } else if (value != null) {
         Json.onError(_fieldHasWrongType<T>(key, value.runtimeType.toString()));
       }
     }
