@@ -122,8 +122,8 @@ class JsonMap {
   }
 
   /// Iterate by keys and convert items
-  Iterable<T> convertEach<T>(T Function(String key, JsonMap jsonMap) converter) {
-    return _jsonMap.keys.map((key) => converter(key, this));
+  Iterable<T> convertEach<T>(T Function(String key, Json value) converter) {
+    return _jsonMap.keys.map((key) => converter(key, Json(_jsonMap[key])));
   }
 
   /// All keys of this map

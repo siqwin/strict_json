@@ -1,3 +1,6 @@
+2.0.5
+Refactor convertEach method
+
 2.0.4
 Fix some bugs
 
