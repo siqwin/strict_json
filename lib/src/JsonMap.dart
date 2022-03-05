@@ -144,6 +144,7 @@ class JsonMap {
     final value = _jsonMap[key];
     if (value == null) {
       if (defaultValue != null) {
+        Json.onError(_fieldIsNullButRequired<T>(key));
         return defaultValue;
       }
       throw FormatException(_fieldIsNullButRequired<T>(key));
