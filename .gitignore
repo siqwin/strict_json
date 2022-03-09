@@ -74,3 +74,5 @@ build/
 
 example/ios
 example/android
+
+pubspec.lock
