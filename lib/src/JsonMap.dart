@@ -86,14 +86,26 @@ class JsonMap {
   /// Returns JsonList by [key]
   ///
   /// If map not contains [key] or the value is not a List and [defaultValue] is null then throw FormatException
-  JsonList getList(String key, [List<dynamic>? defaultValue]) {
+  JsonList getJsonList(String key, [List<dynamic>? defaultValue]) {
     return JsonList(_value<List<dynamic>>(key, defaultValue));
   }
 
   /// Returns JsonList by [key] or default value
-  JsonList? getListOr(String key, [List<dynamic>? defaultValue]) {
+  JsonList? getJsonListOr(String key, [List<dynamic>? defaultValue]) {
     final List<dynamic>? value = _valueOr(key, defaultValue);
     return value != null ? JsonList(value) : null;
+  }
+
+  /// Returns List<T> by [key] or default value
+  ///
+  /// If map not contains [key] or the value is not a List<T> and [defaultValue] is null then throw FormatException
+  List<T> getList<T>(String key, [List<T>? defaultValue]) {
+    return _value(key, defaultValue);
+  }
+
+  /// Returns List<T> by [key] or default value
+  List<T>? getListOr<T>(String key, [List<T>? defaultValue]) {
+    return _valueOr(key, defaultValue);
   }
 
   /// Returns Json by [key]
