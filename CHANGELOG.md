@@ -1,3 +1,6 @@
+2.2.1
+Fix onError inheritance
+
 2.2.0
 Add custom onError handler
 

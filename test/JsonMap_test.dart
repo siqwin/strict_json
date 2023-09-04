@@ -163,24 +163,24 @@ void main() {
   test('JsonMap.getList', () {
     expect(json.contains<List>(jsonMapListKey), true);
 
-    expect(json.getList(jsonMapListKey), isA<JsonList>());
-    expect(json.getList(jsonMapListKey).toList(), jsonMapListValue);
+    expect(json.getJsonList(jsonMapListKey), isA<JsonList>());
+    expect(json.getJsonList(jsonMapListKey).toList(), jsonMapListValue);
 
-    expect(json.getList(jsonMapStringKey, jsonMapListValue).toList(), jsonMapListValue);
-    expect(json.getList(jsonMapMissKey, jsonMapListValue).toList(), jsonMapListValue);
-    expect(json.getList(jsonMapNullKey, jsonMapListValue).toList(), jsonMapListValue);
+    expect(json.getJsonList(jsonMapStringKey, jsonMapListValue).toList(), jsonMapListValue);
+    expect(json.getJsonList(jsonMapMissKey, jsonMapListValue).toList(), jsonMapListValue);
+    expect(json.getJsonList(jsonMapNullKey, jsonMapListValue).toList(), jsonMapListValue);
 
-    expect(json.getListOr(jsonMapListKey), isA<JsonList>());
-    expect(json.getListOr(jsonMapListKey)?.toList(), jsonMapListValue);
+    expect(json.getJsonListOr(jsonMapListKey), isA<JsonList>());
+    expect(json.getJsonListOr(jsonMapListKey)?.toList(), jsonMapListValue);
 
-    expect(json.getListOr(jsonMapMissKey, jsonMapListValue), isA<JsonList>());
-    expect(json.getListOr(jsonMapMissKey, jsonMapListValue)?.toList(), jsonMapListValue);
+    expect(json.getJsonListOr(jsonMapMissKey, jsonMapListValue), isA<JsonList>());
+    expect(json.getJsonListOr(jsonMapMissKey, jsonMapListValue)?.toList(), jsonMapListValue);
 
-    expect(json.getListOr(jsonMapNullKey, jsonMapListValue), isA<JsonList>());
-    expect(json.getListOr(jsonMapNullKey, jsonMapListValue)?.toList(), jsonMapListValue);
+    expect(json.getJsonListOr(jsonMapNullKey, jsonMapListValue), isA<JsonList>());
+    expect(json.getJsonListOr(jsonMapNullKey, jsonMapListValue)?.toList(), jsonMapListValue);
 
-    expect(json.getListOr(jsonMapMissKey), null);
-    expect(json.getListOr(jsonMapNullKey), null);
+    expect(json.getJsonListOr(jsonMapMissKey), null);
+    expect(json.getJsonListOr(jsonMapNullKey), null);
 
     expect(() => json.getInt(jsonMapListKey), throwsFormatException);
     expect(json.getIntOr(jsonMapListKey), null);

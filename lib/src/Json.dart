@@ -29,9 +29,11 @@ class Json {
       return json;
     } else if (json is String) {
       final parsedJson = _parseJsonObjectString(json);
-      return parsedJson?.asMapOr(defaultValue);
+      if (parsedJson != null) {
+        return parsedJson.asMapOr(defaultValue);
+      }
     }
-    if (json != null) {
+    if (json != null && json is! String) {
       (_onError ?? onError).call(_jsonHasUnsupportedType(json.runtimeType.toString()));
     }
     return defaultValue != null ? JsonMap(defaultValue, _onError) : null;
@@ -52,7 +54,7 @@ class Json {
   JsonList? asListOr([List<dynamic>? defaultValue]) {
     final json = _jsonObject;
     if (json is List<dynamic>) {
-      return JsonList(json);
+      return JsonList(json, _onError);
     } else if (json is JsonList) {
       return json;
     } else if (json is String) {
@@ -64,7 +66,7 @@ class Json {
     if (json != null) {
       (_onError ?? onError).call(_jsonHasUnsupportedType(json.runtimeType.toString()));
     }
-    return defaultValue != null ? JsonList(defaultValue) : null;
+    return defaultValue != null ? JsonList(defaultValue, _onError) : null;
   }
 
   /// If object is [string] then return it otherwise throw FormatException
@@ -155,7 +157,7 @@ class Json {
   Json? _parseJsonObjectString(String json) {
     try {
       final decode = jsonDecode(json);
-      return Json(decode);
+      return Json(decode, _onError);
     } catch (error) {
       (_onError ?? onError).call(_jsonStringFailedDecode(error));
     }

@@ -3,16 +3,17 @@ part of strict_json;
 class JsonList {
 
   final List<dynamic> _jsonList;
+  final void Function(String message)? _onError;
 
   /// Create JsonList from List<dynamic>
-  const JsonList(List<dynamic>? list) : _jsonList = list ?? const <dynamic>[];
+  const JsonList(List<dynamic>? list, [ this._onError ]) : _jsonList = list ?? const <dynamic>[];
 
   /// Returns first element from the list
   ///
   /// If the list is empty throw FormatException.
   Json first() {
     if (_jsonList.isNotEmpty) {
-      return Json(_jsonList.first);
+      return Json(_jsonList.first, _onError);
     } else {
       throw const FormatException("Json list is empty but first item is required");
     }
@@ -20,7 +21,7 @@ class JsonList {
 
   /// Returns first element from the list or default value
   Json? firstOr([Object? defaultValue]) {
-    return _jsonList.isNotEmpty ? Json(_jsonList.first) : (defaultValue != null ? Json(defaultValue) : null);
+    return _jsonList.isNotEmpty ? Json(_jsonList.first, _onError) : (defaultValue != null ? Json(defaultValue, _onError) : null);
   }
 
   /// Returns last element from the list
@@ -28,7 +29,7 @@ class JsonList {
   /// If the list is empty throw FormatException.
   Json last() {
     if (_jsonList.isNotEmpty) {
-      return Json(_jsonList.last);
+      return Json(_jsonList.last, _onError);
     } else {
       throw const FormatException("Json list is empty but last item is required");
     }
@@ -36,7 +37,7 @@ class JsonList {
 
   /// Returns first element from the list or default value
   Json? lastOr([Object? defaultValue]) {
-    return _jsonList.isNotEmpty ? Json(_jsonList.last) : (defaultValue != null ? Json(defaultValue) : null);
+    return _jsonList.isNotEmpty ? Json(_jsonList.last, _onError) : (defaultValue != null ? Json(defaultValue, _onError) : null);
   }
 
   /// Returns [index]] element from the list
@@ -44,7 +45,7 @@ class JsonList {
   /// If the index out of range throw FormatException.
   Json elementAt(int index) {
     if (_jsonList.length > index) {
-      return Json(_jsonList[index]);
+      return Json(_jsonList[index], _onError);
     } else {
       throw const FormatException("Index is out of range");
     }
@@ -52,21 +53,21 @@ class JsonList {
 
   /// Returns [index]] element from the list or default value
   Json? elementAtOr(int index, [Object? defaultValue]) {
-    return _jsonList.length > index ? Json(_jsonList[index]) : (defaultValue != null ? Json(defaultValue) : null);
+    return _jsonList.length > index ? Json(_jsonList[index], _onError) : (defaultValue != null ? Json(defaultValue, _onError) : null);
   }
 
   /// Represents each element of the list as JsonMap and convert it with converter.
   ///
   /// Each element must be Map otherwise throw Exception
   Iterable<R> convertJsonMap<R>(R Function(JsonMap value) converter) {
-    return _jsonList.map((value) => converter(Json(value).asMap()));
+    return _jsonList.map((value) => converter(Json(value, _onError).asMap()));
   }
 
   /// Represents each element of the list as JsonList and convert it with converter.
   ///
   /// Each element must be List otherwise throw Exception
   Iterable<R> convertJsonList<R>(R Function(JsonList value) converter) {
-    return _jsonList.map((value) => converter(Json(value).asList()));
+    return _jsonList.map((value) => converter(Json(value, _onError).asList()));
   }
 
   /// Convert each element with converter.

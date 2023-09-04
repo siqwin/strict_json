@@ -72,26 +72,26 @@ class JsonMap {
   ///
   /// If map not contains [key] or the value has a different type and [defaultValue] is null then throw FormatException
   JsonMap getMap(String key, [Map<String, dynamic>? defaultValue]) {
-    return JsonMap(_value<Map<String, dynamic>>(key, defaultValue));
+    return JsonMap(_value<Map<String, dynamic>>(key, defaultValue), _onError);
   }
 
   /// Returns JsonMap by [key] or default value
   JsonMap? getMapOr(String key, [Map<String, dynamic>? defaultValue]) {
     final Map<String, dynamic>? value = _valueOr(key, defaultValue);
-    return value != null ? JsonMap(value) : null;
+    return value != null ? JsonMap(value, _onError) : null;
   }
 
   /// Returns JsonList by [key]
   ///
   /// If map not contains [key] or the value is not a List and [defaultValue] is null then throw FormatException
   JsonList getJsonList(String key, [List<dynamic>? defaultValue]) {
-    return JsonList(_value<List<dynamic>>(key, defaultValue));
+    return JsonList(_value<List<dynamic>>(key, defaultValue), _onError);
   }
 
   /// Returns JsonList by [key] or default value
   JsonList? getJsonListOr(String key, [List<dynamic>? defaultValue]) {
     final List<dynamic>? value = _valueOr(key, defaultValue);
-    return value != null ? JsonList(value) : null;
+    return value != null ? JsonList(value, _onError) : null;
   }
 
   /// Returns List<T> by [key] or default value
@@ -110,13 +110,13 @@ class JsonMap {
   ///
   /// If map not contains [key] or the value is not a Map and [defaultValue] is null then throw FormatException
   Json getJson(String key, [Object? defaultValue]) {
-    return Json(_value(key, defaultValue));
+    return Json(_value(key, defaultValue), _onError);
   }
 
   /// Returns Json by [key] or default value
   Json? getJsonOr(String key, [Object? defaultValue]) {
     final value = _valueOr(key, defaultValue);
-    return value != null ? Json(value) : null;
+    return value != null ? Json(value, _onError) : null;
   }
 
   /// Returns true if map contains the given [key].
@@ -133,7 +133,7 @@ class JsonMap {
 
   /// Iterate by keys and convert items
   Iterable<T> convertEach<T>(T Function(String key, Json value) converter) {
-    return _jsonMap.keys.map((key) => converter(key, Json(_jsonMap[key])));
+    return _jsonMap.keys.map((key) => converter(key, Json(_jsonMap[key], _onError)));
   }
 
   /// All keys of this map
