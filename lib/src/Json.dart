@@ -1,14 +1,13 @@
-import 'dart:convert';
-
-import 'JsonList.dart';
-import 'JsonMap.dart';
+part of strict_json;
 
 class Json {
 
   final Object? _jsonObject;
+  final void Function(String message)? _onError;
 
   /// Create Json from the Object
-  const Json(Object? jsonObject) : _jsonObject = jsonObject;
+  const Json(Object? jsonObject, [ this._onError ]):
+    _jsonObject = jsonObject;
 
   /// Convert Json to the JsonMap or create JsonMap from [defaultValue]
   ///
@@ -25,19 +24,17 @@ class Json {
   JsonMap? asMapOr([Map<String, dynamic>? defaultValue]) {
     final json = _jsonObject;
     if (json is Map<String, dynamic>) {
-      return JsonMap(json);
+      return JsonMap(json, _onError);
     } else if (json is JsonMap) {
       return json;
     } else if (json is String) {
       final parsedJson = _parseJsonObjectString(json);
-      if (parsedJson != null) {
-        return parsedJson.asMapOr(defaultValue);
-      }
+      return parsedJson?.asMapOr(defaultValue);
     }
     if (json != null) {
-      onError(_jsonHasUnsupportedType(json.runtimeType.toString()));
+      (_onError ?? onError).call(_jsonHasUnsupportedType(json.runtimeType.toString()));
     }
-    return defaultValue != null ? JsonMap(defaultValue) : null;
+    return defaultValue != null ? JsonMap(defaultValue, _onError) : null;
   }
 
   /// Convert Json to the JsonList or create JsonList from [defaultValue]
@@ -65,7 +62,7 @@ class Json {
       }
     }
     if (json != null) {
-      onError(_jsonHasUnsupportedType(json.runtimeType.toString()));
+      (_onError ?? onError).call(_jsonHasUnsupportedType(json.runtimeType.toString()));
     }
     return defaultValue != null ? JsonList(defaultValue) : null;
   }
@@ -136,7 +133,7 @@ class Json {
       return value;
     } else {
       if (defaultValue != null) {
-        onError(_jsonHasWrongType<T>(value.runtimeType.toString()));
+        (_onError ?? onError).call(_jsonHasWrongType<T>(value.runtimeType.toString()));
         return defaultValue;
       }
       throw FormatException(_jsonHasWrongType<T>(value.runtimeType.toString()));
@@ -150,7 +147,7 @@ class Json {
     } else if (value is T) {
       return value;
     } else {
-      onError(_jsonHasWrongType<T>(value.runtimeType.toString()));
+      (_onError ?? onError).call(_jsonHasWrongType<T>(value.runtimeType.toString()));
       return defaultValue;
     }
   }
@@ -160,12 +157,12 @@ class Json {
       final decode = jsonDecode(json);
       return Json(decode);
     } catch (error) {
-      onError(_jsonStringFailedDecode(error));
+      (_onError ?? onError).call(_jsonStringFailedDecode(error));
     }
     return null;
   }
 
-  static Function(String message) onError = _defaultErrorHandler;
+  static void Function(String message) onError = _defaultErrorHandler;
 
   static void _defaultErrorHandler(String message) => print(message);
 

@@ -1,7 +1,4 @@
-import 'dart:convert';
-
-import 'Json.dart';
-import 'JsonMap.dart';
+part of strict_json;
 
 class JsonList {
 

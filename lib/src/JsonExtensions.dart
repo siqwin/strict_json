@@ -1,6 +1,4 @@
-import 'Json.dart';
-import 'JsonList.dart';
-import 'JsonMap.dart';
+part of strict_json;
 
 extension JsonListExtensions on List<dynamic> {
   JsonList toJsonList() => JsonList(this);

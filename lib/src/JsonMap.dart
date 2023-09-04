@@ -1,14 +1,12 @@
-import 'dart:convert';
-
-import 'Json.dart';
-import 'JsonList.dart';
+part of strict_json;
 
 class JsonMap {
 
   final Map<String, dynamic> _jsonMap;
+  final void Function(String message)? _onError;
 
   /// Create JsonMap from Map<String, dynamic>
-  const JsonMap(Map<String, dynamic>? map) : _jsonMap = map ?? const <String, dynamic>{};
+  const JsonMap(Map<String, dynamic>? map, [ this._onError ]) : _jsonMap = map ?? const <String, dynamic>{};
 
   /// Returns int value by [key] or defaultValue
   ///
@@ -156,7 +154,7 @@ class JsonMap {
     final value = _jsonMap[key];
     if (value == null) {
       if (defaultValue != null) {
-        Json.onError(_fieldIsNullButRequired<T>(key));
+        (_onError ?? Json.onError).call(_fieldIsNullButRequired<T>(key));
         return defaultValue;
       }
       throw FormatException(_fieldIsNullButRequired<T>(key));
@@ -164,7 +162,7 @@ class JsonMap {
       return value;
     } else {
       if (defaultValue != null) {
-        Json.onError(_fieldHasWrongType<T>(key, value.runtimeType.toString()));
+        (_onError ?? Json.onError).call(_fieldHasWrongType<T>(key, value.runtimeType.toString()));
         return defaultValue;
       }
       throw FormatException(_fieldHasWrongType<T>(key, value.runtimeType.toString()), value?.toString());
@@ -178,7 +176,7 @@ class JsonMap {
     } else if (value is T) {
       return value;
     } else {
-      Json.onError(_fieldHasWrongType<T>(key, value.runtimeType.toString()));
+      (_onError ?? Json.onError).call(_fieldHasWrongType<T>(key, value.runtimeType.toString()));
       return defaultValue;
     }
   }

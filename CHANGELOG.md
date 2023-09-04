@@ -1,3 +1,6 @@
+2.2.0
+Add custom onError handler
+
 2.1.0
 * **Breaking change** 
   * Methods `getJson` and `getJsonOr` renamed to `getJsonList` and `getJsonListOr` respectively
