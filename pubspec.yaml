@@ -1,6 +1,6 @@
 name: strict_json
 description: The package allows you to work with dynamic data in a strict form.
-version: 2.2.1
+version: 2.3.0
 repository: https://github.com/siqwin/strict_json.git
 
 environment:

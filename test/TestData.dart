@@ -1,4 +1,5 @@
 import 'package:strict_json/strict_json.dart';
+import 'package:test/test.dart';
 
 const jsonMapIntKey = "int_key";
 const jsonMapIntValue = 1;
@@ -45,3 +46,9 @@ const List<dynamic> jsonList = [ "a", "b", "c" ];
 
 const jsonOfStringJsonList = Json(stringJsonList);
 const jsonOfJsonList = Json(jsonList);
+
+final Matcher throwsJsonTypeException = throwsA(const TypeMatcher<JsonTypeException>());
+final Matcher throwsJsonNullException = throwsA(const TypeMatcher<JsonNullException>());
+final Matcher throwsJsonValueException = throwsA(const TypeMatcher<JsonValueException>());
+final Matcher throwsJsonFieldNullException = throwsA(const TypeMatcher<JsonFieldNullException>());
+final Matcher throwsJsonFieldTypeException = throwsA(const TypeMatcher<JsonFieldTypeException>());

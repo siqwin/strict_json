@@ -6,31 +6,31 @@ import 'TestData.dart';
 void main() {
 
   test('JsonListExtensions.toJsonList', () {
-    final _jsonList = jsonList.toJsonList();
-    expect(_jsonList, isA<JsonList>());
-    expect(_jsonList.toList(), jsonList);
+    final innerJsonList = jsonList.toJsonList();
+    expect(innerJsonList, isA<JsonList>());
+    expect(innerJsonList.toList(), jsonList);
   });
 
   test('JsonMapExtensions.toJsonMap', () {
-    final _jsonMap = jsonMap.toJsonMap();
-    expect(_jsonMap, isA<JsonMap>());
-    expect(_jsonMap.toMap(), jsonMap);
+    final innerJsonMap = jsonMap.toJsonMap();
+    expect(innerJsonMap, isA<JsonMap>());
+    expect(innerJsonMap.toMap(), jsonMap);
   });
 
   test('JsonStringExtensions.toJsonList', () {
-    final _jsonList = stringJsonList.toJsonList();
-    expect(_jsonList, isA<JsonList>());
-    expect(_jsonList.toList(), jsonList);
+    final innerJsonList = stringJsonList.toJsonList();
+    expect(innerJsonList, isA<JsonList>());
+    expect(innerJsonList.toList(), jsonList);
 
-    expect(stringJsonList.toJsonMap, throwsFormatException);
+    expect(stringJsonList.toJsonMap, throwsJsonTypeException);
   });
 
   test('JsonStringExtensions.toJsonMap', () {
-    final _jsonMap = stringJsonMap.toJsonMap();
-    expect(_jsonMap, isA<JsonMap>());
-    expect(_jsonMap.toMap(), jsonMap);
+    final innerJsonMap = stringJsonMap.toJsonMap();
+    expect(innerJsonMap, isA<JsonMap>());
+    expect(innerJsonMap.toMap(), jsonMap);
 
-    expect(stringJsonMap.toJsonList, throwsFormatException);
+    expect(stringJsonMap.toJsonList, throwsJsonTypeException);
   });
 
 }

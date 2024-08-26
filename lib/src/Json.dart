@@ -3,7 +3,7 @@ part of strict_json;
 class Json {
 
   final Object? _jsonObject;
-  final void Function(String message)? _onError;
+  final void Function(JsonException error)? _onError;
 
   /// Create Json from the Object
   const Json(Object? jsonObject, [ this._onError ]):
@@ -13,11 +13,14 @@ class Json {
   ///
   /// The [jsonObject] must be Map<String, dynamic>, String or JsonMap otherwise throw FormatException
   JsonMap asMap([Map<String, dynamic>? defaultValue]) {
+    if (_jsonObject == null) {
+      throw JsonNullException(this, "Map<String, dynamic>");
+    }
     final jsonMap = asMapOr(defaultValue);
     if (jsonMap != null) {
       return jsonMap;
     }
-    throw const FormatException("Json object is not map");
+    throw JsonTypeException(this, "Map<String, dynamic>", _jsonObject.runtimeType.toString());
   }
 
   /// Convert Json to the JsonMap or create JsonMap from [defaultValue]
@@ -34,7 +37,7 @@ class Json {
       }
     }
     if (json != null && json is! String) {
-      (_onError ?? onError).call(_jsonHasUnsupportedType(json.runtimeType.toString()));
+      (_onError ?? onError).call(JsonTypeException(this, "Map<String, dynamic>, JsonMap, String", json.runtimeType.toString()));
     }
     return defaultValue != null ? JsonMap(defaultValue, _onError) : null;
   }
@@ -43,11 +46,14 @@ class Json {
   ///
   /// The [jsonObject] must be Map<String, dynamic>, String or JsonList otherwise throw FormatException
   JsonList asList([List<dynamic>? defaultValue]) {
+    if (_jsonObject == null) {
+      throw JsonNullException(this, "List<dynamic>");
+    }
     final jsonList = asListOr(defaultValue);
     if (jsonList != null) {
       return jsonList;
     }
-    throw const FormatException("Json object is not list");
+    throw JsonTypeException(this, "List<dynamic>", _jsonObject.runtimeType.toString());
   }
 
   /// Convert Json to the JsonList or create JsonList from [defaultValue]
@@ -64,7 +70,7 @@ class Json {
       }
     }
     if (json != null) {
-      (_onError ?? onError).call(_jsonHasUnsupportedType(json.runtimeType.toString()));
+      (_onError ?? onError).call(JsonTypeException(this, "List<dynamic>, JsonList, String", json.runtimeType.toString()));
     }
     return defaultValue != null ? JsonList(defaultValue, _onError) : null;
   }
@@ -124,21 +130,28 @@ class Json {
     return _jsonObject;
   }
 
+  /// Returns string representation of the Json
+  @override
+  String toString() {
+    return "Json<${_jsonObject.runtimeType}>";
+  }
+
   T _getValue<T>(T? defaultValue) {
     final dynamic value = _jsonObject;
     if (value == null) {
       if (defaultValue != null) {
         return defaultValue;
       }
-      throw FormatException(_jsonIsNullButRequired<T>());
+      throw JsonNullException(this, T.toString());
     } else if (value is T) {
       return value;
     } else {
-      if (defaultValue != null) {
-        (_onError ?? onError).call(_jsonHasWrongType<T>(value.runtimeType.toString()));
-        return defaultValue;
+      final exception = JsonTypeException(this, T.toString(), value.runtimeType.toString());
+      if (defaultValue == null) {
+        throw exception;
       }
-      throw FormatException(_jsonHasWrongType<T>(value.runtimeType.toString()));
+      (_onError ?? onError).call(exception);
+      return defaultValue;
     }
   }
 
@@ -149,7 +162,7 @@ class Json {
     } else if (value is T) {
       return value;
     } else {
-      (_onError ?? onError).call(_jsonHasWrongType<T>(value.runtimeType.toString()));
+      (_onError ?? onError).call(JsonTypeException(this, T.toString(), value.runtimeType.toString()));
       return defaultValue;
     }
   }
@@ -159,20 +172,14 @@ class Json {
       final decode = jsonDecode(json);
       return Json(decode, _onError);
     } catch (error) {
-      (_onError ?? onError).call(_jsonStringFailedDecode(error));
+      (_onError ?? onError).call(JsonDecodeException(this, error));
     }
     return null;
   }
 
-  static void Function(String message) onError = _defaultErrorHandler;
+  static void Function(JsonException error) onError = _defaultErrorHandler;
 
-  static void _defaultErrorHandler(String message) => print(message);
+  // ignore: avoid_print
+  static void _defaultErrorHandler(JsonException error) => print(error);
 
-  String _jsonIsNullButRequired<T>() => "strict_json: the json is null but required ('${T.toString()}' expected)";
-
-  String _jsonHasWrongType<T>(String dataType) => "strict_json: the json object has wrong type ('${T.toString()}' expected but '$dataType' given)";
-
-  String _jsonStringFailedDecode(Object error) => "strict_json: the json object failed to decode ($error)";
-
-  String _jsonHasUnsupportedType(String dataType) => "strict_json: the json object has unsupported type ('Map', 'String', 'JsonMap' expected but '$dataType' given)";
 }

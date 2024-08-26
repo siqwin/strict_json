@@ -8,21 +8,21 @@ void main() {
   test('Json(string)', () {
     const value = "invalid_json";
     const json = Json(value);
-    expect(json.asMap, throwsFormatException);
+    expect(json.asMap, throwsJsonTypeException);
     expect(json.asMap(jsonMap).toMap(), jsonMap);
     expect(json.asMapOr(), null);
     expect(json.asMapOr(jsonMap)?.toMap(), jsonMap);
     expect(json.asObject(), value);
     expect(json.asString(), value);
 
-    expect(json.asDouble, throwsFormatException);
-    expect(json.asInt, throwsFormatException);
-    expect(json.asList, throwsFormatException);
+    expect(json.asDouble, throwsJsonTypeException);
+    expect(json.asInt, throwsJsonTypeException);
+    expect(json.asList, throwsJsonTypeException);
     expect(json.asList(jsonList).toList(), jsonList);
     expect(json.asListOr(), null);
     expect(json.asListOr(jsonList)?.toList(), jsonList);
-    expect(json.asBool, throwsFormatException);
-    expect(json.asNum, throwsFormatException);
+    expect(json.asBool, throwsJsonTypeException);
+    expect(json.asNum, throwsJsonTypeException);
   });
 
   test('Json(int)', () {
@@ -37,18 +37,18 @@ void main() {
     expect(json.asNumOr(3), value);
     expect(json.asObject(), value);
 
-    expect(json.asString, throwsFormatException);
+    expect(json.asString, throwsJsonTypeException);
     expect(json.asStringOr(), null);
     expect(json.asStringOr(jsonMapStringValue), jsonMapStringValue);
-    expect(json.asBool, throwsFormatException);
-    expect(json.asMap, throwsFormatException);
+    expect(json.asBool, throwsJsonTypeException);
+    expect(json.asMap, throwsJsonTypeException);
     expect(json.asMapOr(), null);
     expect(json.asMap(jsonMap).toMap(), jsonMap);
-    expect(json.asList, throwsFormatException);
+    expect(json.asList, throwsJsonTypeException);
     expect(json.asList(jsonList).toList(), jsonList);
     expect(json.asListOr(), null);
     expect(json.asListOr(jsonList)?.toList(), jsonList);
-    expect(json.asDouble, throwsFormatException);
+    expect(json.asDouble, throwsJsonTypeException);
     expect(json.asDoubleOr(), null);
     expect(json.asDoubleOr(3.0), 3.0);
   });
@@ -63,11 +63,11 @@ void main() {
     expect(json.asNum(), value);
     expect(json.asObject(), value);
 
-    expect(json.asString, throwsFormatException);
-    expect(json.asMap, throwsFormatException);
-    expect(json.asList, throwsFormatException);
-    expect(json.asBool, throwsFormatException);
-    expect(json.asInt, throwsFormatException);
+    expect(json.asString, throwsJsonTypeException);
+    expect(json.asMap, throwsJsonTypeException);
+    expect(json.asList, throwsJsonTypeException);
+    expect(json.asBool, throwsJsonTypeException);
+    expect(json.asInt, throwsJsonTypeException);
   });
 
   test('Json(stringMap)', () {
@@ -75,11 +75,11 @@ void main() {
     expect(jsonOfStringJsonMap.asString(), stringJsonMap);
     expect(jsonOfStringJsonMap.asObject(), stringJsonMap);
 
-    expect(jsonOfStringJsonMap.asDouble, throwsFormatException);
-    expect(jsonOfStringJsonMap.asInt, throwsFormatException);
-    expect(jsonOfStringJsonMap.asNum, throwsFormatException);
-    expect(jsonOfStringJsonMap.asBool, throwsFormatException);
-    expect(jsonOfStringJsonMap.asList, throwsFormatException);
+    expect(jsonOfStringJsonMap.asDouble, throwsJsonTypeException);
+    expect(jsonOfStringJsonMap.asInt, throwsJsonTypeException);
+    expect(jsonOfStringJsonMap.asNum, throwsJsonTypeException);
+    expect(jsonOfStringJsonMap.asBool, throwsJsonTypeException);
+    expect(jsonOfStringJsonMap.asList, throwsJsonTypeException);
   });
 
   test('Json(map)', () {
@@ -87,26 +87,26 @@ void main() {
     expect(jsonOfJsonMap.asMap().toMap(), jsonMap);
     expect(jsonOfJsonMap.asObject(), jsonMap);
 
-    expect(jsonOfJsonMap.asDouble, throwsFormatException);
-    expect(jsonOfJsonMap.asInt, throwsFormatException);
-    expect(jsonOfJsonMap.asNum, throwsFormatException);
-    expect(jsonOfJsonMap.asBool, throwsFormatException);
-    expect(jsonOfJsonMap.asList, throwsFormatException);
+    expect(jsonOfJsonMap.asDouble, throwsJsonTypeException);
+    expect(jsonOfJsonMap.asInt, throwsJsonTypeException);
+    expect(jsonOfJsonMap.asNum, throwsJsonTypeException);
+    expect(jsonOfJsonMap.asBool, throwsJsonTypeException);
+    expect(jsonOfJsonMap.asList, throwsJsonTypeException);
   });
 
   test('Json(null)', () {
     const json = Json(null);
-    expect(json.asMap, throwsFormatException);
-    expect(json.asList, throwsFormatException);
+    expect(json.asMap, throwsJsonNullException);
+    expect(json.asList, throwsJsonNullException);
     expect(json.asObject(), null);
     expect(json.asStringOr(), null);
     expect(json.asString(jsonMapStringValue), jsonMapStringValue);
 
-    expect(json.asDouble, throwsFormatException);
-    expect(json.asInt, throwsFormatException);
-    expect(json.asNum, throwsFormatException);
-    expect(json.asBool, throwsFormatException);
-    expect(json.asString, throwsFormatException);
+    expect(json.asDouble, throwsJsonNullException);
+    expect(json.asInt, throwsJsonNullException);
+    expect(json.asNum, throwsJsonNullException);
+    expect(json.asBool, throwsJsonNullException);
+    expect(json.asString, throwsJsonNullException);
   });
 
   test('Json(bool)', () {
@@ -118,12 +118,12 @@ void main() {
     expect(json.asBoolOr(false), value);
     expect(json.asObject(), value);
 
-    expect(json.asDouble, throwsFormatException);
-    expect(json.asInt, throwsFormatException);
-    expect(json.asNum, throwsFormatException);
-    expect(json.asList, throwsFormatException);
-    expect(json.asMap, throwsFormatException);
-    expect(json.asString, throwsFormatException);
+    expect(json.asDouble, throwsJsonTypeException);
+    expect(json.asInt, throwsJsonTypeException);
+    expect(json.asNum, throwsJsonTypeException);
+    expect(json.asList, throwsJsonTypeException);
+    expect(json.asMap, throwsJsonTypeException);
+    expect(json.asString, throwsJsonTypeException);
   });
 
   test('Json(list)', () {
@@ -131,12 +131,12 @@ void main() {
     expect(jsonOfJsonList.asObject(), jsonList);
     expect(jsonOfJsonList.asList().toList(), jsonList);
 
-    expect(jsonOfJsonList.asDouble, throwsFormatException);
-    expect(jsonOfJsonList.asInt, throwsFormatException);
-    expect(jsonOfJsonList.asNum, throwsFormatException);
-    expect(jsonOfJsonList.asMap, throwsFormatException);
-    expect(jsonOfJsonList.asString, throwsFormatException);
-    expect(jsonOfJsonList.asBool, throwsFormatException);
+    expect(jsonOfJsonList.asDouble, throwsJsonTypeException);
+    expect(jsonOfJsonList.asInt, throwsJsonTypeException);
+    expect(jsonOfJsonList.asNum, throwsJsonTypeException);
+    expect(jsonOfJsonList.asMap, throwsJsonTypeException);
+    expect(jsonOfJsonList.asString, throwsJsonTypeException);
+    expect(jsonOfJsonList.asBool, throwsJsonTypeException);
   });
 
   test('Json(stringList)', () {
@@ -145,11 +145,11 @@ void main() {
     expect(jsonOfStringJsonList.asList().toList(), jsonList);
     expect(jsonOfStringJsonList.asString(), stringJsonList);
 
-    expect(jsonOfStringJsonList.asDouble, throwsFormatException);
-    expect(jsonOfStringJsonList.asInt, throwsFormatException);
-    expect(jsonOfStringJsonList.asNum, throwsFormatException);
-    expect(jsonOfStringJsonList.asMap, throwsFormatException);
-    expect(jsonOfStringJsonList.asBool, throwsFormatException);
+    expect(jsonOfStringJsonList.asDouble, throwsJsonTypeException);
+    expect(jsonOfStringJsonList.asInt, throwsJsonTypeException);
+    expect(jsonOfStringJsonList.asNum, throwsJsonTypeException);
+    expect(jsonOfStringJsonList.asMap, throwsJsonTypeException);
+    expect(jsonOfStringJsonList.asBool, throwsJsonTypeException);
   });
 
 }

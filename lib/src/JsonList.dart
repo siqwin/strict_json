@@ -3,7 +3,7 @@ part of strict_json;
 class JsonList {
 
   final List<dynamic> _jsonList;
-  final void Function(String message)? _onError;
+  final void Function(JsonException error)? _onError;
 
   /// Create JsonList from List<dynamic>
   const JsonList(List<dynamic>? list, [ this._onError ]) : _jsonList = list ?? const <dynamic>[];
@@ -15,7 +15,7 @@ class JsonList {
     if (_jsonList.isNotEmpty) {
       return Json(_jsonList.first, _onError);
     } else {
-      throw const FormatException("Json list is empty but first item is required");
+      throw JsonValueException(Json(this), "Json list is empty but first item is required");
     }
   }
 
@@ -31,7 +31,7 @@ class JsonList {
     if (_jsonList.isNotEmpty) {
       return Json(_jsonList.last, _onError);
     } else {
-      throw const FormatException("Json list is empty but last item is required");
+      throw JsonValueException(Json(this), "Json list is empty but last item is required");
     }
   }
 
@@ -47,7 +47,7 @@ class JsonList {
     if (_jsonList.length > index) {
       return Json(_jsonList[index], _onError);
     } else {
-      throw const FormatException("Index is out of range");
+      throw JsonValueException(Json(this), "Index is out of range");
     }
   }
 
@@ -89,4 +89,9 @@ class JsonList {
   /// Returns string representation of the list
   String toJsonString() => jsonEncode(_jsonList);
 
+  /// Returns string representation of the JsonList
+  @override
+  String toString() {
+    return "JsonList<${_jsonList.runtimeType}>";
+  }
 }

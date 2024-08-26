@@ -1,3 +1,6 @@
+2.3.0
+Refactor error handling
+
 2.2.1
 Fix onError inheritance
 

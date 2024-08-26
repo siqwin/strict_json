@@ -9,6 +9,7 @@ void main() {
   }""";
 
   final productList = const Json(json).asMap().getJsonList("products").convertJsonMap((it) => Product(it)).toList();
+  // ignore: avoid_print
   print(productList);
 }
 

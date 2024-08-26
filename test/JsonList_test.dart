@@ -17,7 +17,7 @@ void main() {
 
   test('JsonList.first/Or', () {
     expect(json.first().asObject(), jsonList.first);
-    expect(jsonEmpty.first, throwsFormatException);
+    expect(jsonEmpty.first, throwsJsonValueException);
 
     expect(json.firstOr()?.asObject(), jsonList.first);
     expect(jsonEmpty.firstOr(), null);
@@ -26,7 +26,7 @@ void main() {
 
   test('JsonList.last/Or', () {
     expect(json.last().asObject(), jsonList.last);
-    expect(jsonEmpty.last, throwsFormatException);
+    expect(jsonEmpty.last, throwsJsonValueException);
 
     expect(json.lastOr()?.asObject(), jsonList.last);
     expect(jsonEmpty.lastOr(), null);
@@ -36,7 +36,7 @@ void main() {
   test('JsonList.elementAt/Or', () {
     expect(json.elementAt(0).asObject(), jsonList.first);
     expect(json.elementAt(jsonList.length - 1).asObject(), jsonList.last);
-    expect(() => json.elementAt(jsonList.length), throwsFormatException);
+    expect(() => json.elementAt(jsonList.length), throwsJsonValueException);
 
     expect(json.elementAtOr(0)?.asObject(), jsonList.first);
     expect(json.elementAtOr(jsonList.length), null);

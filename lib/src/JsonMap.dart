@@ -3,7 +3,7 @@ part of strict_json;
 class JsonMap {
 
   final Map<String, dynamic> _jsonMap;
-  final void Function(String message)? _onError;
+  final void Function(JsonException error)? _onError;
 
   /// Create JsonMap from Map<String, dynamic>
   const JsonMap(Map<String, dynamic>? map, [ this._onError ]) : _jsonMap = map ?? const <String, dynamic>{};
@@ -98,12 +98,12 @@ class JsonMap {
   ///
   /// If map not contains [key] or the value is not a List<T> and [defaultValue] is null then throw FormatException
   List<T> getList<T>(String key, [List<T>? defaultValue]) {
-    return _value(key, defaultValue);
+    return _value<List<T>>(key, defaultValue);
   }
 
   /// Returns List<T> by [key] or default value
   List<T>? getListOr<T>(String key, [List<T>? defaultValue]) {
-    return _valueOr(key, defaultValue);
+    return _valueOr<List<T>?>(key, defaultValue);
   }
 
   /// Returns Json by [key]
@@ -150,22 +150,30 @@ class JsonMap {
   /// Returns string representation of the map
   String toJsonString() => jsonEncode(_jsonMap);
 
+  /// Returns string representation of the JsonList
+  @override
+  String toString() {
+    return "JsonMap<${_jsonMap.runtimeType}>";
+  }
+
   T _value<T>(String key, T? defaultValue) {
     final value = _jsonMap[key];
     if (value == null) {
-      if (defaultValue != null) {
-        (_onError ?? Json.onError).call(_fieldIsNullButRequired<T>(key));
-        return defaultValue;
+      final exception = JsonFieldNullException(Json(this), key, T.toString());
+      if (defaultValue == null) {
+        throw exception;
       }
-      throw FormatException(_fieldIsNullButRequired<T>(key));
+      (_onError ?? Json.onError).call(exception);
+      return defaultValue;
     } else if (value is T) {
       return value;
     } else {
-      if (defaultValue != null) {
-        (_onError ?? Json.onError).call(_fieldHasWrongType<T>(key, value.runtimeType.toString()));
-        return defaultValue;
+      final exception = JsonFieldTypeException(Json(this), key, T.toString(), value.runtimeType.toString());
+      if (defaultValue == null) {
+        throw exception;
       }
-      throw FormatException(_fieldHasWrongType<T>(key, value.runtimeType.toString()), value?.toString());
+      (_onError ?? Json.onError).call(exception);
+      return defaultValue;
     }
   }
 
@@ -176,13 +184,9 @@ class JsonMap {
     } else if (value is T) {
       return value;
     } else {
-      (_onError ?? Json.onError).call(_fieldHasWrongType<T>(key, value.runtimeType.toString()));
+      (_onError ?? Json.onError).call(JsonFieldTypeException(Json(this), key, T.toString(), value.runtimeType.toString()));
       return defaultValue;
     }
   }
-
-  String _fieldIsNullButRequired<T>(String key) => "strict_json: the field '$key' is null but required ('${T.toString()}' expected)";
-
-  String _fieldHasWrongType<T>(String key, String dataType) => "strict_json: the field '$key' has wrong type ('${T.toString()}' expected but '$dataType' given)";
 
 }
