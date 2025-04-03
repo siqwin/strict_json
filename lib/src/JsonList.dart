@@ -59,25 +59,50 @@ class JsonList {
   /// Represents each element of the list as JsonMap and convert it with converter.
   ///
   /// Each element must be Map otherwise throw Exception
-  Iterable<R> convertJsonMap<R>(R Function(JsonMap value) converter) {
-    return _jsonList.map((value) => converter(Json(value, _onError).asMap()));
+  Iterable<R> convertJsonMap<R>(R Function(JsonMap value) converter, [Map<String, dynamic>? defaultValue]) {
+    return _jsonList.map((value) => converter(Json(value, _onError).asMap(defaultValue)));
   }
 
   /// Represents each element of the list as JsonList and convert it with converter.
   ///
   /// Each element must be List otherwise throw Exception
-  Iterable<R> convertJsonList<R>(R Function(JsonList value) converter) {
-    return _jsonList.map((value) => converter(Json(value, _onError).asList()));
+  Iterable<R> convertJsonList<R>(R Function(JsonList value) converter, [List<dynamic>? defaultValue]) {
+    return _jsonList.map((value) => converter(Json(value, _onError).asList(defaultValue)));
   }
 
   /// Convert each element with converter.
-  Iterable<R> convert<T, R>(R Function(T value) converter) {
-    return cast<T>().map(converter);
+  Iterable<R> convert<R>(R Function(dynamic value) converter) {
+    return _jsonList.map(converter);
   }
 
   /// Cast source of the JsonList
-  List<R> cast<R>() {
-    return _jsonList.cast<R>();
+  ///
+  /// If the element is not of type [R] then throw Exception
+  Iterable<R> cast<R>([R? defaultValue]) {
+    return _jsonList.map((value) {
+      if (value is R) {
+        return value;
+      } else {
+        if (defaultValue != null) {
+          return defaultValue;
+        } else {
+          throw JsonTypeException(Json(this), R.toString(), value.runtimeType.toString());
+        }
+      }
+    });
+  }
+
+  /// Cast source of the JsonList
+  ///
+  /// If the element is not of type [R] then return default value
+  Iterable<R?> castOr<R>([R? defaultValue]) {
+    return _jsonList.map((value) {
+      if (value is R) {
+        return value;
+      } else {
+        return defaultValue;
+      }
+    });
   }
 
   /// Returns source of the JsonList

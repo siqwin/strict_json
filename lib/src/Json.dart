@@ -13,12 +13,12 @@ class Json {
   ///
   /// The [jsonObject] must be Map<String, dynamic>, String or JsonMap otherwise throw FormatException
   JsonMap asMap([Map<String, dynamic>? defaultValue]) {
-    if (_jsonObject == null) {
-      throw JsonNullException(this, "Map<String, dynamic>");
-    }
     final jsonMap = asMapOr(defaultValue);
     if (jsonMap != null) {
       return jsonMap;
+    }
+    if (_jsonObject == null) {
+      throw JsonNullException(this, "Map<String, dynamic>");
     }
     throw JsonTypeException(this, "Map<String, dynamic>", _jsonObject.runtimeType.toString());
   }
@@ -46,12 +46,12 @@ class Json {
   ///
   /// The [jsonObject] must be Map<String, dynamic>, String or JsonList otherwise throw FormatException
   JsonList asList([List<dynamic>? defaultValue]) {
-    if (_jsonObject == null) {
-      throw JsonNullException(this, "List<dynamic>");
-    }
     final jsonList = asListOr(defaultValue);
     if (jsonList != null) {
       return jsonList;
+    }
+    if (_jsonObject == null) {
+      throw JsonNullException(this, "List<dynamic>");
     }
     throw JsonTypeException(this, "List<dynamic>", _jsonObject.runtimeType.toString());
   }

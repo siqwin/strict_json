@@ -1,3 +1,8 @@
+2.4.0
+* When jsonObject is null asMap/asList methods with default value not throw error
+* Added default value parameter for convertJsonMap/convertJsonList methods 
+* Added castOr method. Added default value parameter for cast method
+
 2.3.0
 Refactor error handling
 
